@@ -16,19 +16,24 @@
 #
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrofork.  If not, see <http://www.gnu.org/licenses/>.
-
-from typing import Callable
+import collections.abc as c
+import typing as t
 
 import pyrogram
 from pyrogram.filters import Filter
+from pyrogram.types import MessageReactionCountUpdated
+
+HANDLER: t.TypeAlias = (
+    "c.Callable[[pyrogram.Client, MessageReactionCountUpdated], t.Any]"
+)
 
 
 class OnMessageReactionCountUpdated:
     def on_message_reaction_count_updated(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+        self: pyrogram.Client | Filter | None = None,
+        filters: Filter | None = None,
+        group: int = 0,
+    ) -> c.Callable[[HANDLER], HANDLER]:
         """Decorator for handling anonymous reaction changes on messages.
 
         This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
@@ -42,17 +47,22 @@ class OnMessageReactionCountUpdated:
                 The group identifier, defaults to 0.
         """
 
-        def decorator(func: Callable) -> Callable:
+        def decorator(func: HANDLER) -> HANDLER:
             if isinstance(self, pyrogram.Client):
-                self.add_handler(pyrogram.handlers.MessageReactionCountUpdatedHandler(func, filters), group)
+                self.add_handler(
+                    pyrogram.handlers.MessageReactionCountUpdatedHandler(func, filters),
+                    group,
+                )
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
 
                 func.handlers.append(
                     (
-                        pyrogram.handlers.MessageReactionCountUpdatedHandler(func, self),
-                        group if filters is None else filters
+                        pyrogram.handlers.MessageReactionCountUpdatedHandler(
+                            func, self
+                        ),
+                        group if filters is None else filters,
                     )
                 )
 

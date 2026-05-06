@@ -79,6 +79,12 @@ This is the list of changes compared to upstream:
 - `reply_to` now passes true raw types, instead of pyrofork's types.
 
   This avoids crashes when you run with debug logs enabled.
+- These decorators are now typed:
+  - `client.on_deleted_messages`
+  - `client.on_edited_messages`
+  - `client.on_message`
+  - `client.on_message_reaction_count_updated`
+  - `client.on_message_reaction_updated`
 
 ### Resources
 

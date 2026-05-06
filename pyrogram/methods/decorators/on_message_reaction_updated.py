@@ -16,19 +16,22 @@
 #
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrofork.  If not, see <http://www.gnu.org/licenses/>.
-
-from typing import Callable
+import collections.abc as c
+import typing as t
 
 import pyrogram
 from pyrogram.filters import Filter
+from pyrogram.types import MessageReactionUpdated
+
+HANDLER: t.TypeAlias = "c.Callable[[pyrogram.Client, MessageReactionUpdated], t.Any]"
 
 
 class OnMessageReactionUpdated:
     def on_message_reaction_updated(
-        self=None,
-        filters=None,
-        group: int = 0
-    ) -> Callable:
+        self: pyrogram.Client | Filter | None = None,
+        filters: Filter | None = None,
+        group: int = 0,
+    ) -> c.Callable[[HANDLER], HANDLER]:
         """Decorator for handling reaction changes on messages.
 
         This does the same thing as :meth:`~pyrogram.Client.add_handler` using the
@@ -42,9 +45,12 @@ class OnMessageReactionUpdated:
                 The group identifier, defaults to 0.
         """
 
-        def decorator(func: Callable) -> Callable:
+        def decorator(func: HANDLER) -> HANDLER:
             if isinstance(self, pyrogram.Client):
-                self.add_handler(pyrogram.handlers.MessageReactionUpdatedHandler(func, filters), group)
+                self.add_handler(
+                    pyrogram.handlers.MessageReactionUpdatedHandler(func, filters),
+                    group,
+                )
             elif isinstance(self, Filter) or self is None:
                 if not hasattr(func, "handlers"):
                     func.handlers = []
@@ -52,7 +58,7 @@ class OnMessageReactionUpdated:
                 func.handlers.append(
                     (
                         pyrogram.handlers.MessageReactionUpdatedHandler(func, self),
-                        group if filters is None else filters
+                        group if filters is None else filters,
                     )
                 )
 
