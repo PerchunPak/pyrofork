@@ -215,9 +215,12 @@ class Chat(Object):
 
         gifts_count (``int``, *optional*):
             Number of gifts received by the user.
-            
+
         bot_verification (:obj:`~pyrogram.types.BotVerification`, *optional*):
             Information about bot verification.
+
+        unread_count (``int``, *optional*):
+            Number of unread messages, only for channels.
     """
 
     def __init__(
@@ -275,7 +278,8 @@ class Chat(Object):
         max_reaction_count: int = None,
         subscription_until_date: datetime = None,
         gifts_count: int = None,
-        bot_verification: "types.BotVerification" = None
+        bot_verification: "types.BotVerification" = None,
+        unread_count: int | None = None,
     ):
         super().__init__(client)
 
@@ -330,6 +334,7 @@ class Chat(Object):
         self.subscription_until_date = subscription_until_date
         self.gifts_count = gifts_count
         self.bot_verification = bot_verification
+        self.unread_count = unread_count
 
     @property
     def full_name(self) -> str:
@@ -539,6 +544,7 @@ class Chat(Object):
                 parsed_chat.join_requests_count = getattr(full_chat, "requests_pending", None)
             else:
                 parsed_chat = Chat._parse_channel_chat(client, chat_raw)
+                assert parsed_chat is not None
                 parsed_chat.members_count = full_chat.participants_count
                 parsed_chat.join_requests_count = getattr(full_chat, "requests_pending", None)
                 parsed_chat.slow_mode_delay = getattr(full_chat, "slowmode_seconds", None)
@@ -553,6 +559,7 @@ class Chat(Object):
                 parsed_chat.is_auto_translation_enabled = getattr(full_chat, "auto_translation", None)
                 parsed_chat.gifts_count = getattr(full_chat, "stargifts_count", None)
                 parsed_chat.folder_id = getattr(full_chat, "folder_id", None)
+                parsed_chat.unread_count = getattr(full_chat, "unread_count", None)
 
                 linked_chat_raw = chats.get(full_chat.linked_chat_id, None)
 

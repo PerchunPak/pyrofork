@@ -73,6 +73,7 @@ pip install git+https://github.com/PerchunPak/pyrofork
 This is the list of changes compared to upstream:
 
 - A lot of additional type annotations
+- Added `unread_count` to `types.user_and_chats.Chat`
 
 ### Resources
 
