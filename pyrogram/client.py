@@ -220,6 +220,9 @@ class Client(Methods):
         client_platform (:obj:`~pyrogram.enums.ClientPlatform`, *optional*):
             The platform where this client is running.
             Defaults to 'other'
+
+        extra (``dict``, *optional*):
+            Extra information that user might want to share using the client object.
     """
 
     APP_VERSION = f"Pyrogram {__version__}"
@@ -282,7 +285,8 @@ class Client(Methods):
         max_concurrent_transmissions: int = MAX_CONCURRENT_TRANSMISSIONS,
         client_platform: "enums.ClientPlatform" = enums.ClientPlatform.OTHER,
         max_message_cache_size: int = MAX_CACHE_SIZE,
-        max_business_user_connection_cache_size: int = MAX_CACHE_SIZE
+        max_business_user_connection_cache_size: int = MAX_CACHE_SIZE,
+        extra: dict[Any, Any] | None = {},
     ):
         super().__init__()
 
@@ -321,6 +325,7 @@ class Client(Methods):
         self.max_message_cache_size = max_message_cache_size
         self.max_message_cache_size = max_message_cache_size
         self.max_business_user_connection_cache_size = max_business_user_connection_cache_size
+        self.extra = extra if extra is not None else {}
 
         self.executor = ThreadPoolExecutor(self.workers, thread_name_prefix="Handler")
 
