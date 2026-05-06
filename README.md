@@ -28,6 +28,10 @@
 
 ## Pyrofork
 
+> [!CAUTION]
+> This is a fork of https://github.com/Mayuri-Chan/pyrofork with my personal patches.
+> See [Changes](#changes) for a list of what is different.
+
 > Elegant, modern and asynchronous Telegram MTProto API framework in Python for users and bots
 
 ``` python
@@ -48,18 +52,12 @@ app.run()
 framework. It enables you to easily interact with the main Telegram API through a user account (custom client) or a bot
 identity (bot API alternative) using Python.
 
-### Support
-
-If you'd like to support Pyrofork, you can consider:
-
-- [Become a GitHub sponsor](https://github.com/sponsors/Mayuri-Chan).
-
 ### Key Features
 
 - **Ready**: Install Pyrofork with pip and start building your applications right away.
 - **Easy**: Makes the Telegram API simple and intuitive, while still allowing advanced usages.
 - **Elegant**: Low-level details are abstracted and re-presented in a more convenient way.
-- **Fast**: Boosted up by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C.  
+- **Fast**: Boosted up by [TgCrypto](https://github.com/pyrogram/tgcrypto), a high-performance cryptography library written in C.
 - **Type-hinted**: Types and methods are all type-hinted, enabling excellent editor support.
 - **Async**: Fully asynchronous (also usable synchronously if wanted, for convenience).
 - **Powerful**: Full access to Telegram's API to execute any official client action and more.
@@ -67,8 +65,12 @@ If you'd like to support Pyrofork, you can consider:
 ### Installing
 
 ``` bash
-pip3 install pyrofork
+pip install git+https://github.com/PerchunPak/pyrofork
 ```
+
+### Changes
+
+This is the list of changes compared to upstream:
 
 ### Resources
 
