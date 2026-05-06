@@ -241,14 +241,14 @@ class Chat(Object):
         is_gifts_available: bool = None,
         is_auto_translation_enabled: bool = None,
         title: str = None,
-        username: str = None,
+        username: str | None = None,
         first_name: str = None,
         last_name: str = None,
         photo: "types.ChatPhoto" = None,
         stories: List["types.Story"] = None,
         wallpaper: "types.Document" = None,
         bio: str = None,
-        description: str = None,
+        description: str | None = None,
         dc_id: int = None,
         folder_id: int = None,
         has_protected_content: bool = None,
@@ -388,7 +388,7 @@ class Chat(Object):
         )
 
     @staticmethod
-    def _parse_channel_chat(client, channel: raw.types.Channel) -> Optional["Chat"]:
+    def _parse_channel_chat(client, channel: raw.types.Channel | None) -> Optional["Chat"]:
         if channel is None:
             return None
         peer_id = utils.get_channel_id(channel.id)
@@ -484,7 +484,7 @@ class Chat(Object):
             return Chat._parse_channel_chat(client, chats[peer.channel_id])
 
     @staticmethod
-    async def _parse_full(client, chat_full: Union[raw.types.messages.ChatFull, raw.types.users.UserFull]) -> "Chat":
+    async def _parse_full(client, chat_full: Union[raw.types.messages.ChatFull, raw.types.messages.ChannelFull, raw.types.users.UserFull]) -> "Chat":
         users = {u.id: u for u in chat_full.users}
         chats = {c.id: c for c in chat_full.chats}
 

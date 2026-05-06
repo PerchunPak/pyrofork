@@ -72,6 +72,8 @@ pip install git+https://github.com/PerchunPak/pyrofork
 
 This is the list of changes compared to upstream:
 
+- A lot of additional type annotations
+
 ### Resources
 
 - Check out the docs at https://pyrofork.wulan17.dev to learn more about Pyrofork, get started right

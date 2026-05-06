@@ -33,7 +33,7 @@ from importlib import import_module
 from io import StringIO, BytesIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import Union, List, Optional, Callable, AsyncGenerator, Tuple
+from typing import Union, List, Optional, Callable, AsyncGenerator, Tuple, Self
 
 import pyrogram
 from pyrogram import __version__, __license__
@@ -380,19 +380,19 @@ class Client(Methods):
         self.listeners = {listener_type: [] for listener_type in pyrogram.enums.ListenerTypes}
         self.loop = asyncio.get_event_loop()
 
-    def __enter__(self):
+    def __enter__(self) -> Self:
         return self.start()
 
-    def __exit__(self, *args):
+    def __exit__(self, *args) -> Self:
         try:
             self.stop()
         except ConnectionError:
             pass
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         return await self.start()
 
-    async def __aexit__(self, *args):
+    async def __aexit__(self, *args) -> Self:
         try:
             await self.stop()
         except ConnectionError:

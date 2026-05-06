@@ -97,7 +97,7 @@ class Storage:
     async def is_bot(self, value: bool = object):
         raise NotImplementedError
 
-    async def export_session_string(self):
+    async def export_session_string(self) -> str:
         packed = struct.pack(
             self.SESSION_STRING_FORMAT,
             await self.dc_id(),
