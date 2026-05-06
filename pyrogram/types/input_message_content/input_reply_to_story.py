@@ -42,8 +42,8 @@ class InputReplyToStory(Object):
         self.peer = peer
         self.story_id = story_id
 
-    def write(self):
+    def build(self):
         return raw.types.InputReplyToStory(
             peer=self.peer,
             story_id=self.story_id
-        ).write()
+        )

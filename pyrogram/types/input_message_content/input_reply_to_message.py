@@ -67,7 +67,7 @@ class InputReplyToMessage(Object):
         self.quote_entities = quote_entities
         self.quote_offset = quote_offset
 
-    def write(self):
+    def build(self):
         reply_to_msg_id = None
         top_msg_id = None
         if self.reply_to_message_id or self.message_thread_id:
@@ -86,5 +86,5 @@ class InputReplyToMessage(Object):
                 quote_text=self.quote_text,
                 quote_entities=self.quote_entities,
                 quote_offset=self.quote_offset,
-            ).write()
+            )
         return None

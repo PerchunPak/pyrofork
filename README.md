@@ -76,6 +76,9 @@ This is the list of changes compared to upstream:
 - Added `unread_count` to `types.user_and_chats.Chat`
 - `Client` can now accept argument `extra`, which is a dict specifically for
   user's information, that is useful to pass around using the `client` object.
+- `reply_to` now passes true raw types, instead of pyrofork's types.
+
+  This avoids crashes when you run with debug logs enabled.
 
 ### Resources
 

@@ -519,7 +519,7 @@ async def get_reply_to(
             peer=peer,
             story_id=reply_to_story_id
         )
-    return reply_to
+    return reply_to.build() if reply_to is not None else None
 
 def get_first_url(text):
     text = re.sub(r"^\s*(<[\w<>=\s\"]*>)\s*", r"\1", text)

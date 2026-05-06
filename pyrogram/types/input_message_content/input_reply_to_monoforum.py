@@ -37,7 +37,7 @@ class InputReplyToMonoforum(Object):
 
         self.monoforum_peer = monoforum_peer
 
-    def write(self):
+    def build(self):
         return raw.types.InputReplyToMonoForum(
             monoforum_peer_id=self.monoforum_peer
-        ).write()
+        )
