@@ -1,4 +1,4 @@
-VENV := venv
+VENV := .venv
 PYTHON := $(VENV)/bin/python
 HOST = $(shell ifconfig | grep "inet " | tail -1 | cut -d\  -f2)
 TAG = v$(shell grep -E '__version__ = ".*"' pyrogram/__init__.py | cut -d\" -f2)
