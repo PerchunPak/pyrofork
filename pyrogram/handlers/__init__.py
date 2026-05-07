@@ -20,6 +20,7 @@
 from .bot_business_connect_handler import BotBusinessConnectHandler
 from .bot_business_message_handler import BotBusinessMessageHandler
 from .callback_query_handler import CallbackQueryHandler
+from .channel_difference_too_long_handler import ChannelDifferenceTooLongHandler
 from .chat_join_request_handler import ChatJoinRequestHandler
 from .chat_member_updated_handler import ChatMemberUpdatedHandler
 from .conversation_handler import ConversationHandler
@@ -46,6 +47,7 @@ __all__ = [
     "BotBusinessConnectHandler",
     "BotBusinessMessageHandler",
     "CallbackQueryHandler",
+    "ChannelDifferenceTooLongHandler",
     "ChatJoinRequestHandler",
     "ChatMemberUpdatedHandler",
     "ConversationHandler",

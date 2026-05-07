@@ -24,6 +24,7 @@ from .business_message import BusinessMessage
 from .business_recipients import BusinessRecipients
 from .business_weekly_open import BusinessWeeklyOpen
 from .business_working_hours import BusinessWorkingHours
+from .channel_difference_too_long import ChannelDifferenceTooLong
 from .chat import Chat
 from .chat_admin_with_invite_links import ChatAdminWithInviteLinks
 from .chat_color import ChatColor
@@ -72,6 +73,7 @@ __all__ = [
     "BusinessRecipients",
     "BusinessWeeklyOpen",
     "BusinessWorkingHours",
+    "ChannelDifferenceTooLong",
     "Chat",
     "ChatMember",
     "ChatPermissions",

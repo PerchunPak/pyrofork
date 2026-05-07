@@ -86,6 +86,8 @@ This is the list of changes compared to upstream:
   - `client.on_message_reaction_count_updated`
   - `client.on_message_reaction_updated`
 - There is now uv.lock with dependencies up to 2025-12-11 (last commit from upstream)
+- Added `@client.on_channel_difference_too_long` decorator, that gets called when
+  we couldn't fetch all chat updates. See https://core.telegram.org/constructor/updates.channelDifferenceTooLong
 
 ### Resources
 

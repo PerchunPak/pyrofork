@@ -20,6 +20,7 @@
 from .on_bot_business_connect import OnBotBusinessConnect
 from .on_bot_business_message import OnBotBusinessMessage
 from .on_callback_query import OnCallbackQuery
+from .on_channel_difference_too_long import OnChannelDifferenceTooLong
 from .on_chat_join_request import OnChatJoinRequest
 from .on_chat_member_updated import OnChatMemberUpdated
 from .on_chosen_inline_result import OnChosenInlineResult
@@ -65,6 +66,7 @@ class Decorators(
     OnStory,
     OnMessageReactionUpdated,
     OnMessageReactionCountUpdated,
-    OnPurchasedPaidMedia
+    OnPurchasedPaidMedia,
+    OnChannelDifferenceTooLong
 ):
     pass

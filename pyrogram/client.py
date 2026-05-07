@@ -649,6 +649,7 @@ class Client(Methods):
                         ), "peer_id", None
                     ), "channel_id", None
                 ) or getattr(update, "channel_id", None)
+                channel_id = utils.get_channel_id(channel_id) if channel_id else 0
 
                 pts = getattr(update, "pts", None)
                 pts_count = getattr(update, "pts_count", None)
@@ -656,7 +657,7 @@ class Client(Methods):
                 if pts:
                     await self.storage.update_state(
                         (
-                            utils.get_channel_id(channel_id) if channel_id else 0,
+                            channel_id,
                             pts,
                             None,
                             updates.date,
@@ -664,8 +665,8 @@ class Client(Methods):
                         )
                     )
 
-                if isinstance(update, raw.types.UpdateChannelTooLong):
-                    log.info(update)
+                if pts and isinstance(update, raw.types.UpdateChannelTooLong):
+                    _ = await self.recover_gaps(channel_id)
 
                 if isinstance(update, raw.types.UpdateNewChannelMessage) and is_min:
                     message = update.message
@@ -674,7 +675,7 @@ class Client(Methods):
                         try:
                             diff = await self.invoke(
                                 raw.functions.updates.GetChannelDifference(
-                                    channel=await self.resolve_peer(utils.get_channel_id(channel_id)),
+                                    channel=await self.resolve_peer(channel_id),
                                     filter=raw.types.ChannelMessagesFilter(
                                         ranges=[raw.types.MessageRange(
                                             min_id=update.message.id,
@@ -731,14 +732,17 @@ class Client(Methods):
         elif isinstance(updates, raw.types.UpdatesTooLong):
             log.info(updates)
 
-    async def recover_gaps(self) -> Tuple[int, int]:
+    async def recover_gaps(self, update_id: int | None = None) -> Tuple[int, int]:
         states = await self.storage.update_state()
+        if update_id is not None:
+            states = [state for state in states if state[0] == update_id]
 
         message_updates_counter = 0
         other_updates_counter = 0
 
         if not states:
-            log.info("No states found, skipping recovery.")
+            context = "" if update_id is None else f" for update id {update_id}"
+            log.info(f"No states found{context}, skipping recovery.")
             return (message_updates_counter, other_updates_counter)
 
         for state in states:
@@ -768,7 +772,11 @@ class Client(Methods):
                 if isinstance(diff, raw.types.updates.DifferenceEmpty):
                     break
                 elif isinstance(diff, raw.types.updates.DifferenceTooLong):
-                    break
+                    raise RuntimeError(
+                        "Client is **extremely** outdated. There are more than "
+                        + "1 million updates to handle and I (Perchun) do not "
+                        + "know how to handle this. GLHF"
+                    )
                 elif isinstance(diff, raw.types.updates.Difference):
                     local_pts = diff.state.pts
                 elif isinstance(diff, raw.types.updates.DifferenceSlice):
@@ -782,12 +790,16 @@ class Client(Methods):
                 elif isinstance(diff, raw.types.updates.ChannelDifferenceEmpty):
                     break
                 elif isinstance(diff, raw.types.updates.ChannelDifferenceTooLong):
-                    break
+                    local_pts = diff.dialog.pts
                 elif isinstance(diff, raw.types.updates.ChannelDifference):
                     local_pts = diff.pts
 
                 users = {i.id: i for i in diff.users}
                 chats = {i.id: i for i in diff.chats}
+
+                if isinstance(diff, raw.types.updates.ChannelDifferenceTooLong):
+                    self.dispatcher.updates_queue.put_nowait((diff, users, chats))
+                    break
 
                 for message in diff.new_messages:
                     message_updates_counter += 1
@@ -812,9 +824,12 @@ class Client(Methods):
                 if isinstance(diff, (raw.types.updates.Difference, raw.types.updates.ChannelDifference)):
                     break
 
-            await self.storage.update_state(id)
+            await self.storage.update_state((
+                id, local_pts, None, local_date, None
+            ))
 
-        log.info("Recovered %s messages and %s updates.", message_updates_counter, other_updates_counter)
+        if update_id is None:
+            log.info("Recovered %s messages and %s updates.", message_updates_counter, other_updates_counter)
         return (message_updates_counter, other_updates_counter)
 
     async def load_session(self):

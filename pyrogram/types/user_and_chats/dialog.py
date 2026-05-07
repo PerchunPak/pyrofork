@@ -18,10 +18,10 @@
 #  along with Pyrofork.  If not, see <http://www.gnu.org/licenses/>.
 
 import pyrogram
-from pyrogram import raw
-from pyrogram import types
-from ..object import Object
+from pyrogram import raw, types
+
 from ... import utils
+from ..object import Object
 
 
 class Dialog(Object):
@@ -56,7 +56,7 @@ class Dialog(Object):
         unread_messages_count: int,
         unread_mentions_count: int,
         unread_mark: bool,
-        is_pinned: bool
+        is_pinned: bool,
     ):
         super().__init__(client)
 
@@ -68,13 +68,20 @@ class Dialog(Object):
         self.is_pinned = is_pinned
 
     @staticmethod
-    def _parse(client, dialog: "raw.types.Dialog", messages, users, chats) -> "Dialog":
+    def _parse(
+        client,
+        dialog: raw.types.Dialog,
+        # where int is dialog.peer
+        messages: dict[int, types.Message],
+        users: dict[int, "raw.types.User"],
+        chats: dict[int, "raw.types.Chat"],
+    ) -> "Dialog":
         return Dialog(
+            client=client,
             chat=types.Chat._parse_dialog(client, dialog.peer, users, chats),
             top_message=messages.get(utils.get_peer_id(dialog.peer)),
             unread_messages_count=dialog.unread_count,
             unread_mentions_count=dialog.unread_mentions_count,
             unread_mark=dialog.unread_mark,
             is_pinned=dialog.pinned,
-            client=client
         )
