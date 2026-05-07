@@ -683,7 +683,7 @@ class Client(Methods):
                                         )]
                                     ),
                                     pts=pts - pts_count,
-                                    limit=pts,
+                                    limit=10000,
                                     force=False
                                 )
                             )
@@ -821,7 +821,7 @@ class Client(Methods):
                         (update, users, chats)
                     )
 
-                if isinstance(diff, (raw.types.updates.Difference, raw.types.updates.ChannelDifference)):
+                if isinstance(diff, raw.types.updates.Difference):
                     break
 
             await self.storage.update_state((

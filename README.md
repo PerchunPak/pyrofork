@@ -88,6 +88,7 @@ This is the list of changes compared to upstream:
 - There is now uv.lock with dependencies up to 2025-12-11 (last commit from upstream)
 - Added `@client.on_channel_difference_too_long` decorator, that gets called when
   we couldn't fetch all chat updates. See https://core.telegram.org/constructor/updates.channelDifferenceTooLong
+- If there were more than ~100 updates for a single channel, the first batch is no longer dropped.
 
 ### Resources
 
