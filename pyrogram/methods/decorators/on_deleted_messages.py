@@ -23,7 +23,7 @@ import pyrogram
 from pyrogram.filters import Filter
 from pyrogram.types import Message
 
-HANDLER: t.TypeAlias = "c.Callable[[pyrogram.Client, Message], t.Any]"
+HANDLER: t.TypeAlias = "c.Callable[[pyrogram.Client, list[Message]], t.Any]"
 
 
 class OnDeletedMessages:
