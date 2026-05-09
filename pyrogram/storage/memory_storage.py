@@ -28,6 +28,11 @@ log = logging.getLogger(__name__)
 
 
 class MemoryStorage(SQLiteStorage):
+    OLD_SESSION_STRING_FORMAT = ">B?256sI?"
+    OLD_SESSION_STRING_FORMAT_64 = ">B?256sQ?"
+    SESSION_STRING_SIZE = 351
+    SESSION_STRING_SIZE_64 = 356
+
     def __init__(self, name: str, session_string: str | None = None):
         super().__init__(name)
 
