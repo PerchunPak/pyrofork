@@ -80,11 +80,12 @@ This is the list of changes compared to upstream:
 
   This avoids crashes when you run with debug logs enabled.
 - These decorators are now typed:
+  - `client.on_callback_query`
   - `client.on_deleted_messages`
   - `client.on_edited_messages`
-  - `client.on_message`
   - `client.on_message_reaction_count_updated`
   - `client.on_message_reaction_updated`
+  - `client.on_message`
 - There is now uv.lock with dependencies up to 2025-12-11 (last commit from upstream)
 - Added `@client.on_channel_difference_too_long` decorator, that gets called when
   we couldn't fetch all chat updates. See https://core.telegram.org/constructor/updates.channelDifferenceTooLong
