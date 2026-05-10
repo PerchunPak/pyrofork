@@ -1125,7 +1125,7 @@ class Chat(Object):
 
         return await self._client.join_chat(self.username or self.id)
 
-    async def leave(self):
+    async def leave(self) -> raw.types.Updates:
         """Bound method *leave* of :obj:`~pyrogram.types.Chat`.
 
         Use as a shortcut for:
