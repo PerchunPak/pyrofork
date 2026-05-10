@@ -91,6 +91,7 @@ This is the list of changes compared to upstream:
   we couldn't fetch all chat updates. See https://core.telegram.org/constructor/updates.channelDifferenceTooLong
 - If there were more than ~100 updates for a single channel, the first batch is no longer dropped.
 - `pyrogram.storage.Storage` is now properly annotated, with overloads.
+- `FloodWait` errors are now handled gracefully with a global backoff per query type.
 
 ### Resources
 

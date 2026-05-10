@@ -37,6 +37,7 @@ from pyrogram.errors import (
 )
 from pyrogram.raw.all import layer
 from pyrogram.raw.core import TLObject, MsgContainer, Int, FutureSalts
+from pyrogram.utils import FloodWaiter
 from .internals import MsgId, MsgFactory
 
 log = logging.getLogger(__name__)
@@ -421,13 +422,15 @@ class Session:
             except (FloodWait, FloodPremiumWait) as e:
                 amount = e.value
 
-                if amount > sleep_threshold >= 0:
+                waiting_failed = False
+                try:
+                    async with FloodWaiter(name=query_name, backoff=amount, threshold=sleep_threshold):
+                        pass
+                except TimeoutError:
+                    waiting_failed = True
+
+                if waiting_failed:
                     raise
-
-                log.warning('[%s] Waiting for %s seconds before continuing (required by "%s")',
-                            self.client.name, amount, query_name)
-
-                await asyncio.sleep(amount)
             except (OSError, InternalServerError, ServiceUnavailable) as e:
                 if retries == 0:
                     raise e from None
