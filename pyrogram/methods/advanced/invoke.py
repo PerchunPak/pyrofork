@@ -33,8 +33,8 @@ class Invoke:
         query: TLObject,
         retries: int = Session.MAX_RETRIES,
         timeout: float = Session.WAIT_TIMEOUT,
-        sleep_threshold: float = None
-    ):
+        sleep_threshold: float | None = None,
+    ) -> TLObject:
         """Invoke raw Telegram functions.
 
         This method makes it possible to manually call every single Telegram API method in a low-level manner.
