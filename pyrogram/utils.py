@@ -579,9 +579,8 @@ class FloodWaiter(metaclass=_FloodWaiterSingleton):
                     + f"seconds), but threshold is {self._threshold}"
                 )
 
-            logger.info(
-                f"Sleeping until {self._sleep_until} for invoke request {self._name}"
-            )
+            log_repr = self._sleep_until.astimezone().strftime("%H:%M:%S %Y-%m-%d")
+            logger.info(f"Sleeping until {log_repr} for invoke request {self._name}")
             await asyncio.sleep(to_sleep)
 
     async def __aenter__(self) -> None:
