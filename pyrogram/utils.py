@@ -329,7 +329,7 @@ def get_peer_id(peer: Union[raw.base.Peer, raw.base.InputPeer]) -> int:
     raise ValueError(f"Peer type invalid: {peer}")
 
 
-def get_peer_type(peer_id: int) -> str:
+def get_peer_type(peer_id: int) -> t.Literal["chat", "channel", "user"]:
     if peer_id < 0:
         if MIN_CHAT_ID <= peer_id:
             return "chat"
