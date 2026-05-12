@@ -595,6 +595,11 @@ def start(format: bool = False):
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_types))}")
 
+            f.write("\n\n__all__ = [\n  ")
+            f.write(",\n  ".join(f'"{t}"' for t in sorted(types)))
+            f.write(",\n  ".join(f'"{t}"' for t in sorted(filter(bool, namespaces_to_types))))
+            f.write("\n]")
+
     for namespace, types in namespaces_to_constructors.items():
         with open(DESTINATION_PATH / "types" / namespace / "__init__.py", "w") as f:
             f.write(f"{notice}\n\n")
@@ -611,6 +616,11 @@ def start(format: bool = False):
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_constructors))}\n")
 
+            f.write("\n\n__all__ = [\n  ")
+            f.write(",\n  ".join(f'"{t}"' for t in sorted(types)))
+            f.write(",\n  ".join(f'"{t}"' for t in sorted(filter(bool, namespaces_to_types))))
+            f.write("\n]")
+
     for namespace, types in namespaces_to_functions.items():
         with open(DESTINATION_PATH / "functions" / namespace / "__init__.py", "w") as f:
             f.write(f"{notice}\n\n")
@@ -626,6 +636,11 @@ def start(format: bool = False):
 
             if not namespace:
                 f.write(f"from . import {', '.join(filter(bool, namespaces_to_functions))}")
+
+            f.write("\n\n__all__ = [\n  ")
+            f.write(",\n  ".join(f'"{t}"' for t in sorted(types)))
+            f.write(",\n  ".join(f'"{t}"' for t in sorted(filter(bool, namespaces_to_types))))
+            f.write("\n]")
 
     with open(DESTINATION_PATH / "all.py", "w", encoding="utf-8") as f:
         f.write(notice + "\n\n")
