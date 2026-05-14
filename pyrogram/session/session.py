@@ -37,7 +37,7 @@ from pyrogram.errors import (
 )
 from pyrogram.raw.all import layer
 from pyrogram.raw.core import TLObject, MsgContainer, Int, FutureSalts
-from pyrogram.utils import FloodWaiter
+from pyrogram.flood_waiter import FloodWaiter
 from .internals import MsgId, MsgFactory
 
 log = logging.getLogger(__name__)
