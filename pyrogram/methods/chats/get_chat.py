@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrofork.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Union, overload
 
 import pyrogram
 from pyrogram import raw
@@ -26,6 +26,18 @@ from pyrogram import utils
 
 
 class GetChat:
+    @overload
+    async def get_chat(
+        self: "pyrogram.Client",
+        chat_id: int,
+    ) -> "types.Chat": ...
+
+    @overload
+    async def get_chat(
+        self: "pyrogram.Client",
+        chat_id: str,
+    ) -> Union["types.Chat", "types.ChatPreview"]: ...
+
     async def get_chat(
         self: "pyrogram.Client",
         chat_id: Union[int, str]
@@ -45,8 +57,10 @@ class GetChat:
                 You can also use chat public link in form of *t.me/<username>* (str).
 
         Returns:
-            :obj:`~pyrogram.types.Chat` | :obj:`~pyrogram.types.ChatPreview`: On success, if you've already joined the chat, a chat object is returned,
-            otherwise, a chat preview object is returned.
+            :obj:`~pyrogram.types.Chat` | :obj:`~pyrogram.types.ChatPreview`:
+                Chat preview can only be returned, if ``chat_id`` is a link to
+                a group and you've not yet joined it. Otherwise,
+                :obj:`~pyrogram.types.Chat` is always returned.
 
         Raises:
             ValueError: In case the chat invite link points to a chat you haven't joined yet.
