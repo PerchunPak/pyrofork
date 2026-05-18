@@ -93,6 +93,7 @@ This is the list of changes compared to upstream:
 - `pyrogram.storage.Storage` is now properly annotated, with overloads.
 - `FloodWait` errors are now handled gracefully with a global backoff per query type.
 - `pyrogram.raw.base`, `pyrogram.raw.types` and `pyrogram.raw.functions` now include `__all__`.
+- pyrofork now enforces limit of 30 requests per minute (shared for all requests) to avoid rate limits.
 
 ### Resources
 

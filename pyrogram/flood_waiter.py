@@ -4,7 +4,15 @@ import logging
 import typing as t
 from types import TracebackType
 
+import limits
+from limits.aio.storage import MemoryStorage
+from limits.aio.strategies import MovingWindowRateLimiter
+
 logger = logging.getLogger(__name__)
+
+limits_storage = MemoryStorage()
+rate_limiter = MovingWindowRateLimiter(limits_storage)
+limit_rate = limits.parse("30/minute")
 
 
 class _FloodWaiterSingleton(type):
@@ -42,6 +50,7 @@ class FloodWaiter(metaclass=_FloodWaiterSingleton):
 
     async def acquire(self) -> None:
         async with self._lock:
+            _ = await rate_limiter.hit(limit_rate, "FloodWaiter")
             to_sleep = (self._sleep_until - dt.datetime.now(tz=dt.UTC)).total_seconds()
 
             if to_sleep <= 0:
@@ -52,8 +61,10 @@ class FloodWaiter(metaclass=_FloodWaiterSingleton):
                     + f"seconds), but threshold is {self._threshold}"
                 )
 
-            log_repr = self._sleep_until.astimezone().strftime("%H:%M:%S %Y-%m-%d")
-            logger.info(f"Sleeping until {log_repr} for invoke request {self._name}")
+            log_until = self._sleep_until.astimezone().strftime("%H:%M:%S %Y-%m-%d")
+            logger.warning(
+                f"Sleeping until {log_until} ({to_sleep} seconds) for invoke request {self._name}"
+            )
             await asyncio.sleep(to_sleep)
 
     async def __aenter__(self) -> None:
