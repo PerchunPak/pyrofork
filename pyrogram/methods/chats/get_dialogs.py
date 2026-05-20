@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrofork.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import AsyncGenerator, Optional
+import collections.abc as c
 
 import pyrogram
 from pyrogram import types, raw, utils
@@ -28,7 +28,7 @@ class GetDialogs:
     async def get_dialogs(
         self: "pyrogram.Client",
         limit: int = 0
-    ) -> Optional[AsyncGenerator["types.Dialog", None]]:
+    ) -> c.AsyncGenerator["types.Dialog"]:
         """Get a user's dialogs sequentially.
 
         .. include:: /_includes/usable-by/users.rst
