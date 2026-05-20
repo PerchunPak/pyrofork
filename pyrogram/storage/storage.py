@@ -79,17 +79,19 @@ class Storage(ABC):
 
     @t.overload
     async def update_state(
-        self, update_state: list[tuple[int, int, int, int | None, int]], /
+        self, update_state: tuple[int, int, int | None, int, int | None], /
     ) -> None: ...
     @t.overload
     async def update_state(
         self, update_state: None = None, /
-    ) -> list[tuple[int, int, int, int | None, int]]: ...
+    ) -> list[tuple[int, int, int | None, int, int | None]]: ...
 
     @abstractmethod
     async def update_state(
-        self, update_state: list[tuple[int, int, int, int | None, int]] | None = None, /
-    ) -> list[tuple[int, int, int, int | None, int]] | None:
+        self,
+        update_state: tuple[int, int, int | None, int, int | None] | None = None,
+        /,
+    ) -> list[tuple[int, int, int | None, int, int | None]] | None:
         """Get or set the update state of the current session.
 
         Parameters:
@@ -99,9 +101,9 @@ class Storage(ABC):
                 Tuple contains the following items:
                 - id (signed 64 bit): The pyrogram ID of the entity.
                 - pts (unsigned 32 bit): The telegram PTS value.
-                - qts (unsigned 32 bit): The telegram QTS value.
+                - qts (int | None): The telegram QTS value, currently not implemented.
                 - date (unsigned 32 bit): UNIX timestamp.
-                - seq (int | None): Sequence number, currently not inmplemented.
+                - seq (int | None): Sequence number, currently not implemented.
         """
 
     @abstractmethod
