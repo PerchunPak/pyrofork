@@ -27,7 +27,7 @@ import re
 import shutil
 import sys
 from concurrent.futures.thread import ThreadPoolExecutor
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta
 from hashlib import sha256
 from importlib import import_module
 from io import StringIO, BytesIO
@@ -844,7 +844,7 @@ class Client(Methods):
         async for dialog in self.get_dialogs():
             await self.storage.update_state(
                 # id, pts, qts, date, seq
-                (dialog.chat.id, 1, None, min_date.timestamp(tz=UTC), None),
+                (dialog.chat.id, 1, None, min_date.timestamp(), None),
             )
 
     async def load_session(self):
