@@ -27,7 +27,7 @@ import re
 import shutil
 import sys
 from concurrent.futures.thread import ThreadPoolExecutor
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from hashlib import sha256
 from importlib import import_module
 from io import StringIO, BytesIO
@@ -735,6 +735,11 @@ class Client(Methods):
 
     async def recover_gaps(self, update_id: int | None = None) -> Tuple[int, int]:
         states = await self.storage.update_state()
+
+        if len(states) <= 1: # id=0 (self) shouldn't count
+            await self._init_update_state()
+            states = await self.storage.update_state()
+
         if update_id is not None:
             states = [state for state in states if state[0] == update_id]
 
@@ -747,7 +752,7 @@ class Client(Methods):
             return (message_updates_counter, other_updates_counter)
 
         for state in states:
-            id, local_pts, _, local_date, _ = state
+            id, local_pts, _qts, local_date, _seq = state
 
             prev_pts = 0
 
@@ -832,6 +837,15 @@ class Client(Methods):
         if update_id is None:
             log.info("Recovered %s messages and %s updates.", message_updates_counter, other_updates_counter)
         return (message_updates_counter, other_updates_counter)
+
+    async def _init_update_state(self) -> None:
+        """Initialize `update_state` table, when `recover_gaps` get called for the first time."""
+        min_date = datetime.fromisoformat("2000-01-01")
+        async for dialog in self.get_dialogs():
+            await self.storage.update_state(
+                # id, pts, qts, date, seq
+                (dialog.chat.id, 1, None, min_date.timestamp(tz=UTC), None),
+            )
 
     async def load_session(self):
         await self.storage.open()

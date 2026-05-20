@@ -94,6 +94,7 @@ This is the list of changes compared to upstream:
 - `FloodWait` errors are now handled gracefully with a global backoff per query type.
 - `pyrogram.raw.base`, `pyrogram.raw.types` and `pyrogram.raw.functions` now include `__all__`.
 - pyrofork now enforces limit of 30 requests per minute (shared for all requests) to avoid rate limits.
+- If `skip_updates=False`, on first start pyrofork will download all joined dialogs to the storage
 
 ### Resources
 
