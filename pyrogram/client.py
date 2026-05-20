@@ -330,7 +330,7 @@ class Client(Methods):
         self.executor = ThreadPoolExecutor(self.workers, thread_name_prefix="Handler")
 
         if storage:
-            self.storage = storage
+            self.storage: Storage = storage
         elif self.session_string:
             self.storage = MemoryStorage(self.name, self.session_string)
         elif self.in_memory:
