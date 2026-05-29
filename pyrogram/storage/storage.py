@@ -18,6 +18,7 @@
 #  along with Pyrofork.  If not, see <http://www.gnu.org/licenses/>.
 
 import base64
+import datetime as dt
 import struct
 import typing as t
 from abc import ABC, abstractmethod
@@ -31,6 +32,7 @@ InputPeer: t.TypeAlias = InputPeerUser | InputPeerChat | InputPeerChannel
 
 class Storage(ABC):
     SESSION_STRING_FORMAT = ">BI?256sQ?"
+    USERNAME_TTL = dt.timedelta(days=1).total_seconds()
 
     def __init__(self, name: str):
         self.name = name

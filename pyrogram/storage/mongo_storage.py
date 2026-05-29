@@ -53,7 +53,6 @@ class MongoStorage(Storage):
         session = MongoStorage("my_session", connection=conn, remove_peers=True)
     """
     lock: asyncio.Lock
-    USERNAME_TTL = 8 * 60 * 60
 
     def __init__(
         self,
